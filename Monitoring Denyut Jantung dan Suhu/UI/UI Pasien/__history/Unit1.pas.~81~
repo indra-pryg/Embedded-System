@@ -1,0 +1,233 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VclTee.TeeGDIPlus, VCLTee.TeEngine,
+  VCLTee.Series, Vcl.ExtCtrls, VCLTee.TeeProcs, VCLTee.Chart, Vcl.ComCtrls,
+  Vcl.Menus, Vcl.StdCtrls, System.StrUtils, System.Types, System.Net.URLClient,
+  System.Net.HttpClient, System.Net.HttpClientComponent, Data.DB, Vcl.Grids,
+  Vcl.DBGrids, Data.Win.ADODB;
+
+type
+  TForm1 = class(TForm)
+    Timer1: TTimer;
+    PageControl1: TPageControl;
+    Monitor: TTabSheet;
+    Chart1: TChart;
+    Series1: TLineSeries;
+    Series2: TLineSeries;
+    Series3: TLineSeries;
+    Series4: TLineSeries;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Timer2: TTimer;
+    Timer3: TTimer;
+    Timer4: TTimer;
+    NetHTTPClient1: TNetHTTPClient;
+    ADOConnection1: TADOConnection;
+    ADOTable1: TADOTable;
+    DataSource1: TDataSource;
+    Timer5: TTimer;
+    Timer6: TTimer;
+    PageControl2: TPageControl;
+    TabSheet1: TTabSheet;
+    DBGrid1: TDBGrid;
+    Label1: TLabel;
+    procedure delay(lama: LongInt);
+    procedure Panel6Click(Sender: TObject);
+    procedure Panel7Click(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure Timer2Timer(Sender: TObject);
+    procedure Timer3Timer(Sender: TObject);
+    procedure Timer4Timer(Sender: TObject);
+    procedure Timer6Timer(Sender: TObject);
+    procedure Timer5Timer(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  z: LongInt;
+
+implementation
+
+{$R *.dfm}
+
+uses Unit2;
+
+procedure TForm1.delay(lama: LongInt);
+var
+  reff: LongInt;
+begin
+  reff := GetTickCount;
+  repeat
+    Application.ProcessMessages;
+  until ((GetTickCount-reff)>=lama);
+end;
+
+procedure TForm1.Panel6Click(Sender: TObject);
+begin
+  if Panel6.Caption = 'Nyalakan' then
+  begin
+    Panel6.Caption := 'Matikan';
+    Panel6.Color := clMenuHighlight;
+    Timer1.Enabled := True;
+    Timer2.Enabled := True;
+    Timer3.Enabled := True;
+    Timer4.Enabled := True;
+    Timer5.Enabled := True;
+  end
+  else if Panel6.Caption = 'Matikan' then
+  begin
+    if MessageDlg('Yakin Dimatikan?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      Halt(0);
+    end;
+  end;
+end;
+
+procedure TForm1.Panel7Click(Sender: TObject);
+begin
+  Form2.Show;
+end;
+
+function GetURL(const AURL: string): string;
+var
+  HTTPClient: THTTPClient;
+  HTTPResponse: IHTTPResponse;
+begin
+  HTTPClient := THTTPClient.Create;
+  try
+    HTTPResponse := HTTPClient.Get(AURL);
+    Result := HTTPResponse.ContentAsString();
+  finally
+    HTTPClient.Free;
+  end;
+end;
+
+procedure TForm1.Timer1Timer(Sender: TObject);
+var
+  split: TStringDynArray;
+  a, b1, b2, c: string;
+  x1, x2: Integer;
+begin
+  c := GetURL('http://things.ubidots.com/api/v1.6/devices/nodemcu/BPM/values?page_size=1&token=dGcS5ePIh9CVVpdVN2IRj5uOzBOIDg');
+  split := SplitString(c, ' ');
+  a := split[10];
+
+  if Copy(a, 5, 1) = ',' then
+  begin
+    b1 := Copy(a, 1, 2);
+    Panel1.Caption := b1;
+    x1 := StrToInt(Panel1.Caption);
+    Chart1.Series[3].AddXY(z, x1);
+    Inc(z);
+  end
+  else if Copy(a, 6, 1) = ',' then
+  begin
+    b2 := Copy(a, 1 ,3);
+    Panel1.Caption := b2;
+    x2 := StrToInt(Panel1.Caption);
+    Chart1.Series[3].AddXY(z, x2);
+    Inc(z);
+  end;
+
+end;
+
+procedure TForm1.Timer2Timer(Sender: TObject);
+var
+  split: TStringDynArray;
+  a, b, c: string;
+  x: Integer;
+begin
+  //============================= IBI
+  c := GetURL('http://things.ubidots.com/api/v1.6/devices/nodemcu/IBI/values?page_size=1&token=dGcS5ePIh9CVVpdVN2IRj5uOzBOIDg');
+  split := SplitString(c, ' ');
+  a := split[10];
+  b := Copy(a, 1, 3);
+  Panel2.Caption := b;
+  x := StrToInt(Panel2.Caption);
+  Chart1.Series[0].AddXY(z, x);
+  Inc(z);
+end;
+
+procedure TForm1.Timer3Timer(Sender: TObject);
+var
+  split: TStringDynArray;
+  a, b, c: string;
+  x: Integer;
+begin
+  //============================= Signal
+  c := GetURL('http://things.ubidots.com/api/v1.6/devices/nodemcu/Signal/values?page_size=1&token=dGcS5ePIh9CVVpdVN2IRj5uOzBOIDg');
+  split := SplitString(c, ' ');
+  a := split[10];
+  b := Copy(a, 1, 3);
+  Panel3.Caption := b;
+  x := StrToInt(Panel3.Caption);
+  Chart1.Series[1].AddXY(z, x);
+  Inc(z);
+end;
+
+procedure TForm1.Timer4Timer(Sender: TObject);
+var
+  split: TStringDynArray;
+  a, b1, b2, c: string;
+  nb, x1, x2: Real;
+begin
+  //============================= Signal
+  c := GetURL('http://things.ubidots.com/api/v1.6/devices/nodemcu/Suhu/values?page_size=1&token=dGcS5ePIh9CVVpdVN2IRj5uOzBOIDg');
+  split := SplitString(c, ' ');
+  a := split[10];
+
+  if Copy(a, 5, 1) = ',' then
+  begin
+    b1 := Copy(a, 1, 4);
+    Panel4.Caption := b1;
+    x1 := StrToFloat(Panel4.Caption);
+    Chart1.Series[2].AddXY(z, x1);
+    Inc(z);
+  end
+  else if Copy(a, 7, 1) = ',' then
+  begin
+    b2 := Copy(a, 1, 6);
+    nb := StrToFloat(b2)-119;
+    Panel4.Caption := FloatToStr(nb);
+    x2 := StrToFloat(Panel4.Caption);
+    Chart1.Series[2].AddXY(z, x2);
+    Inc(z)
+  end;
+
+
+end;
+
+procedure TForm1.Timer5Timer(Sender: TObject);
+begin
+  ADOTable1.Append;
+  ADOTable1.FieldByName('BPM').AsString := Panel1.Caption;
+  ADOTable1.FieldByName('IBI').AsString := Panel2.Caption;
+  ADOTable1.FieldByName('Signal').AsString := Panel3.Caption;
+  ADOTable1.FieldByName('Temperature').AsString := Panel4.Caption;
+  ADOTable1.FieldByName('Jam').AsString := Label1.Caption;
+  ADOTable1.Post;
+  ADOTable1.Refresh;
+end;
+
+procedure TForm1.Timer6Timer(Sender: TObject);
+var
+  hour, min, sec, msec: Word;
+begin
+  Label1.Caption := FormatDateTime('HH:MM:SS am/pm', Time);
+  DecodeTime(time, hour, min, sec, msec );
+end;
+
+end.

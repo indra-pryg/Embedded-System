@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2017/04/03 12:04:39.000.459,=C:\Users\InGo\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017/05/01 21:55:05.000.940,=C:\Users\InGo\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017/05/05 13:46:20.000.844,=C:\Users\InGo\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017/05/05 13:47:27.000.673,=C:\Users\InGo\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017/05/09 23:29:03.000.248,=C:\Users\InGo\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017/06/22 08:10:14.000.821,=C:\Users\InGo\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017/06/22 09:13:08.000.439,S:\Delphi\UI\UI Pasien\Unit1.pas=C:\Users\InGo\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2017/06/22 09:13:08.000.439,S:\Delphi\UI\UI Pasien\Unit1.dfm=C:\Users\InGo\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2017/06/22 09:13:09.000.614,S:\Delphi\UI\UI Pasien\Project1.dproj=C:\Users\InGo\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2017/06/22 10:45:25.000.764,=S:\Delphi\UI\UI Pasien\Unit2.pas</Transaction>
+  </Transactions>
+</BorlandProject>
